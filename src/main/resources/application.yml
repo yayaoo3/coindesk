@@ -1,0 +1,69 @@
+spring:
+  profiles:
+    active: default
+  mvc:
+    async:
+      request-timeout: 5000
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+  resources:
+    static-locations: classpath:/resources/,classpath:/static/,classpath:/templates/
+
+  messages:
+    basename: static/i18n/messages
+    encoding: UTF-8
+
+  jmx:
+    enabled: false
+
+  main:
+    allow-circular-references: true
+
+server:
+  port: 8080
+  timeout: 30000
+
+  app:
+    version: @project.version@
+    build:
+      time: @build.time@
+
+  use-forward-headers: true
+  forward-headers-strategy: NATIVE
+  tomcat:
+    #最多的連線數
+    max-connections: 5000
+    #同時處理的請求
+    max-threads: 250
+    #max-threads後，
+    accept-count: 300
+
+    use-relative-redirects: true
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+    internal-proxies: .*
+
+  servlet:
+    context-path: /CoinDesk
+
+
+
+
+---
+spring:
+  profiles: default
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:todolist # h2 database 連接位址
+    driver-class-name: org.h2.Driver # 配置driver
+    username: sa # database 用戶名
+    password:  # database 密碼
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+---
