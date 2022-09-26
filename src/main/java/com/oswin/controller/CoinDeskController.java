@@ -2,12 +2,7 @@ package com.oswin.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CoinDeskController {
@@ -20,4 +15,5 @@ public class CoinDeskController {
     public String hello() {
         return "Hello";
     }
+
 }
