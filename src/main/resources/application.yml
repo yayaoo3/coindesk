@@ -1,6 +1,6 @@
 spring:
-  profiles:
-    active: default
+  #profiles:
+    #active: default
   mvc:
     async:
       request-timeout: 5000
@@ -54,7 +54,7 @@ server:
 
 ---
 spring:
-  profiles: default
+  #profiles: default
   h2:
     console:
       enabled: true
@@ -65,5 +65,7 @@ spring:
     password:  # database 密碼
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-
+  proxyHost: @proxyHost@
+  proxyPort: @proxyPort@
+  isUseProxy: @isUseProxy@
 ---

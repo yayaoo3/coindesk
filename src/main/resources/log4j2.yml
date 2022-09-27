@@ -10,9 +10,9 @@ Configuration:
       - name: log.level.console
         value: info
       - name: log.path
-        value: /opt/apache/tomcat/logs/googleOne/
+        value: /demo/coindesk/logs//
       - name: project.name
-        value: googleOne
+        value: coindesk
       - name: log.pattern
         value: "%-d{yyyy-MM-dd HH:mm:ss} %p [%c:%L] (http-${hostName}-%T) [U:%X{USERNAME}] [I:%X{IP_ADDRESS}] %m%n"
 
