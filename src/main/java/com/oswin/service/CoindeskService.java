@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.oswin.util.MyException;
 import com.oswin.model.Coin;
 import com.oswin.model.ForeignCurrency;
 import com.oswin.repository.CoinRepository;
@@ -23,7 +24,6 @@ import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -118,13 +118,19 @@ public class CoindeskService {
     }
 
     public int addCoin(Coin coin) {
-        int f;
-        f = coinRepository.saveCoin(coin.getId(), coin.getChartName(),  coin.getChineseName());
-        if (f == 0)
-            return 0;
-        for (ForeignCurrency fc : coin.getForeignCurrency()) {
-            exchangeRatesRepository.saveForeignCurrency(coin.getId(), fc.getCode(), fc.getSymbol(), fc.getDescription(), fc.getRate_float());
+        int f = 0;
+        try {
+            f = coinRepository.saveCoin(coin.getId(), coin.getChartName(),  coin.getChineseName());
+            if (f == 0)
+                return 0;
+            for (ForeignCurrency fc : coin.getForeignCurrency()) {
+                exchangeRatesRepository.saveForeignCurrency(coin.getId(), fc.getCode(), fc.getSymbol(), fc.getDescription(), fc.getRate_float());
+            }
+        }catch (Exception e){
+            LOGGER.error(e);
+            throw new MyException("add Coin ERROR");
         }
+
         return f;
     }
 
@@ -208,6 +214,10 @@ public class CoindeskService {
             switch (coinSpec) {
                 case Bitcoin:
                     return Bitcoin.getChineseName();
+                case ETH:
+                    return ETH.getChineseName();
+                case Dogecoin:
+                    return Dogecoin.getChineseName();
                 case TestId:
                     return TestId.getChineseName();
             }

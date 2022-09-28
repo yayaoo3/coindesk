@@ -1,6 +1,5 @@
 import com.oswin.CoinDeskApplication;
 import com.oswin.model.Coin;
-import com.oswin.model.Demo2;
 import com.oswin.model.ForeignCurrency;
 import com.oswin.service.CoindeskService;
 import org.junit.jupiter.api.Test;
@@ -71,7 +70,6 @@ public class _CoinTest {
             assertEquals(updateCoin.getForeignCurrency().get(i).getRate_float(), actual_coin.getForeignCurrency().get(i).getRate_float());
             assertEquals(updateCoin.getForeignCurrency().get(i).getSymbol(), actual_coin.getForeignCurrency().get(i).getSymbol());
             assertEquals(updateCoin.getForeignCurrency().get(i).getId(), actual_coin.getForeignCurrency().get(i).getId());
-            assertEquals(updateCoin.getForeignCurrency().get(i).getRate(), actual_coin.getForeignCurrency().get(i).getRate());
         }
     }
 
@@ -105,15 +103,6 @@ public class _CoinTest {
         assertNotEquals(convertCoin, null);
     }
 
-
-    @Test
-    public void whenGetId_ThenSetId() {
-        Demo2 demo2 = new Demo2();
-        demo2.setId("1");
-        String expected = "1";
-        String actual = demo2.getId();
-        assertEquals(expected, actual);
-    }
 
     private Coin generateCoin(String id) {
         String CoinId = id;

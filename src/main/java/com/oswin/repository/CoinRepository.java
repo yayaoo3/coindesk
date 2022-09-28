@@ -1,7 +1,6 @@
 package com.oswin.repository;
 
 import com.oswin.model.Coin;
-import com.oswin.model.Demo2;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

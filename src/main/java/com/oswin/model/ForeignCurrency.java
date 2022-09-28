@@ -24,8 +24,7 @@ public class ForeignCurrency implements Serializable {
 
     @Column(name = "symbol")
     private String symbol;
-    @Column(name = "rate")
-    private String rate;
+
     @Column(name = "description")
     private String description;
     @Column(name = "rate_float")
@@ -55,13 +54,7 @@ public class ForeignCurrency implements Serializable {
         this.symbol = symbol;
     }
 
-    public String getRate() {
-        return rate;
-    }
 
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
 
     public String getDescription() {
         return description;
@@ -85,7 +78,6 @@ public class ForeignCurrency implements Serializable {
                 "id='" + id + '\'' +
                 ", code='" + code + '\'' +
                 ", symbol='" + symbol + '\'' +
-                ", rate='" + rate + '\'' +
                 ", description='" + description + '\'' +
                 ", rate_float=" + rate_float +
                 '}';

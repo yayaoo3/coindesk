@@ -1,10 +1,21 @@
 package com.oswin.util;
 
+//Popular virtual currency spec
 public enum CoinSpec {
     Bitcoin(
             "Bitcoin",
             "比特幣",
             "Bitcoin description"
+    ),
+    ETH(
+            "ETH",
+            "以太幣",
+            "ETH description"
+    ),
+    Dogecoin(
+            "Dogecoin",
+            "狗狗幣",
+            "Dogecoin description"
     ),
     TestId(
             "TestId",
