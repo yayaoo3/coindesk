@@ -26,6 +26,7 @@ public class Coin {
     @Column(name = "chartName")
     private String chartName;
 
+    @Column(name = "chineseName")
     private String chineseName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

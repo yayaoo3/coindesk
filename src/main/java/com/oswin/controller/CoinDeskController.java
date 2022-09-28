@@ -3,7 +3,6 @@ package com.oswin.controller;
 import com.oswin.model.Coin;
 import com.oswin.repository.CoinRepository;
 import com.oswin.service.CoindeskService;
-import com.oswin.service.ExchangeRatesService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class CoinDeskController {
 
     @Resource
     private CoinRepository coinRepository;
-
-    @Autowired
-    private ExchangeRatesService exchangeRatesService;
 
     @Autowired
     private CoindeskService coindeskService;

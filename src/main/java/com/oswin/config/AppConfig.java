@@ -1,7 +1,6 @@
 package com.oswin.config;
 
 import com.oswin.repository.CoinRepository;
-import com.oswin.service.ExchangeRatesService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,12 +31,6 @@ public class AppConfig {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    @Autowired
-    private ExchangeRatesService exchangeRatesService;
-
-    @Resource
-    private CoinRepository coinRepository;
 
     @Bean
     public RestTemplate restTemplate() {

@@ -91,9 +91,9 @@ public class CoindeskService {
         }
 
         JsonObject convertCoin = gson.fromJson(gson.toJson(coin), JsonObject.class);
-        convertCoin.addProperty("updatedTime",covertDateFormat(date));
+        convertCoin.addProperty("updatedTime", covertDateFormat(date));
         convertCoin.remove("foreignCurrency");
-        convertCoin.add("bpi",bpi);
+        convertCoin.add("bpi", bpi);
         LOGGER.info(convertCoin);
         return convertCoin.toString();
     }
@@ -107,8 +107,8 @@ public class CoindeskService {
     }
 
     public List<Coin> getCoinList() {
-        List<Coin> coinList =  coinRepository.findAll();
-        for(Coin coin : coinList) {
+        List<Coin> coinList = coinRepository.findAll();
+        for (Coin coin : coinList) {
             /**try to convert chinese name**/
             if (coin.getChineseName() == null || coin.getChineseName().equals("")) {
                 coin.setChineseName(getCoinChineseName(coin.getChartName()));
@@ -120,13 +120,13 @@ public class CoindeskService {
     public int addCoin(Coin coin) {
         int f = 0;
         try {
-            f = coinRepository.saveCoin(coin.getId(), coin.getChartName(),  coin.getChineseName());
+            f = coinRepository.saveCoin(coin.getId(), coin.getChartName(), coin.getChineseName());
             if (f == 0)
                 return 0;
             for (ForeignCurrency fc : coin.getForeignCurrency()) {
                 exchangeRatesRepository.saveForeignCurrency(coin.getId(), fc.getCode(), fc.getSymbol(), fc.getDescription(), fc.getRate_float());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e);
             throw new MyException("add Coin ERROR");
         }
@@ -173,7 +173,7 @@ public class CoindeskService {
     public String getV2Coin() {
         List<Coin> coinList = getCoinList();
         JsonArray result = new JsonArray();
-        for(Coin coin : coinList){
+        for (Coin coin : coinList) {
             result.add(v2ConvertCoin(coin));
         }
         return result.toString();
@@ -181,29 +181,27 @@ public class CoindeskService {
 
     public String getV2CoinById(String id) {
         Coin coin = getCoinById(id);
-        if(coin==null){
+        if (coin == null) {
             return "not found";
         }
-
         return v2ConvertCoin(coin).toString();
     }
 
-    public JsonObject v2ConvertCoin(Coin coin){
+    public JsonObject v2ConvertCoin(Coin coin) {
         JsonObject data = gson.fromJson(gson.toJson(coin), JsonObject.class);
         JsonArray foreignCurrency = data.getAsJsonArray("foreignCurrency");
-        LOGGER.info(foreignCurrency);
+        LOGGER.debug(foreignCurrency);
+        //轉換外匯表成相關json物件
         JsonObject bpi = new JsonObject();
-        for(JsonElement json : foreignCurrency){
-            LOGGER.info(json);
-            LOGGER.info(json.getAsJsonObject().get("code").getAsString());
+        for (JsonElement json : foreignCurrency) {
             JsonObject code = new JsonObject();
-            code.addProperty("code",json.getAsJsonObject().get("code").getAsString());
-            code.addProperty("symbol",json.getAsJsonObject().get("symbol").getAsString());
-            code.addProperty("description",json.getAsJsonObject().get("description").getAsString());
-            code.addProperty("rate_float",json.getAsJsonObject().get("rate_float").getAsDouble());
-            bpi.add(json.getAsJsonObject().get("code").getAsString(),code);
+            code.addProperty("code", json.getAsJsonObject().get("code").getAsString());
+            code.addProperty("symbol", json.getAsJsonObject().get("symbol").getAsString());
+            code.addProperty("description", json.getAsJsonObject().get("description").getAsString());
+            code.addProperty("rate_float", json.getAsJsonObject().get("rate_float").getAsDouble());
+            bpi.add(json.getAsJsonObject().get("code").getAsString(), code);
         }
-        data.add("bpi",bpi);
+        data.add("bpi", bpi);
         data.remove("foreignCurrency");
         return data;
     }
@@ -221,7 +219,7 @@ public class CoindeskService {
                 case TestId:
                     return TestId.getChineseName();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e);
         }
         return null;
