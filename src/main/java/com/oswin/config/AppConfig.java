@@ -70,9 +70,9 @@ public class AppConfig {
         Coin c = new Coin();
         c.setId("1");
         c.setChartName("1");
-        c.setDisclaimer("1");
+
         //coinRepository.save(c);
-        coinRepository.saveCoin("2","3","3");
+        //coinRepository.saveCoin("2","3","3");
     }
 }
 

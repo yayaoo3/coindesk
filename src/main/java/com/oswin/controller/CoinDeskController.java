@@ -1,19 +1,14 @@
 package com.oswin.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.oswin.model.Coin;
-import com.oswin.model.Demo2;
-import com.oswin.model.ForeignCurrency;
 import com.oswin.repository.CoinRepository;
-import com.oswin.repository.Demo2Repository;
+import com.oswin.service.CoindeskService;
 import com.oswin.service.ExchangeRatesService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +28,9 @@ public class CoinDeskController {
     private ExchangeRatesService exchangeRatesService;
 
     @Autowired
+    private CoindeskService coindeskService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
@@ -40,44 +38,52 @@ public class CoinDeskController {
         return "Hello";
     }
 
-    @Transactional
-    @RequestMapping(value = "/findCoin", method = RequestMethod.GET)
-    public List<Coin> findCoin() {
-        return coinRepository.findAll();
-    }
 
-    @RequestMapping(value = "/example/coindesk", method = RequestMethod.GET)
+    @RequestMapping(value = "/example/coindesk", method = RequestMethod.GET, produces = "application/json")
     public String getexampleCoindesk() {
-        String url = "https://api.coindesk.com/v1/bpi/currentprice.json";
-        Gson gson = new Gson();
-        ResponseEntity response = restTemplate.getForEntity(url, String.class);
-        return response.getStatusCode().value() == 200 ? response.getBody().toString() : "Failed";
-
+        return coindeskService.getCoindeskAPI();
     }
 
-    @RequestMapping(value = "/convert/coindesk", method = RequestMethod.GET)
-    public Coin convertCoindesk() {
-        String url = "https://api.coindesk.com/v1/bpi/currentprice.json";
-        Gson gson = new Gson();
-        ResponseEntity response = restTemplate.getForEntity(url, String.class);
-        return exchangeRatesService.getCoin(response.getBody().toString());
+    @RequestMapping(value = "/convert/coindesk", method = RequestMethod.GET, produces = "application/json")
+    public String convertCoindesk() {
+        return coindeskService.getConvertCoin();
     }
 
     @RequestMapping(value = "/coindesk", method = RequestMethod.GET)
     public List<Coin> getCoindesk() {
-        return coinRepository.findAll();
+        return coindeskService.getCoinList();
+    }
+
+    @RequestMapping(value = "/coindesk/{id}", method = RequestMethod.GET)
+    public Coin getCoindeskById(@PathVariable String id) {
+        return coindeskService.getCoinById(id);
     }
 
     @RequestMapping(value = "/v2/coindesk", method = RequestMethod.GET, produces = "application/json")
     public String getV2Coindesk() {
-        LOGGER.info(exchangeRatesService.getCoin(coinRepository.findAll()));
-        return exchangeRatesService.getCoin(coinRepository.findAll());
+        return coindeskService.getV2Coin();
+    }
+
+    @RequestMapping(value = "/v2/coindesk/{id}", method = RequestMethod.GET,produces = "application/json")
+    public String getV2CoindeskById(@PathVariable String id) {
+        return coindeskService.getV2CoinById(id);
+    }
+
+    @Transactional
+    @RequestMapping(value = "/coindesk", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity addCoindesk(@RequestBody Coin coin) {
+        int flag = coindeskService.addCoin(coin);
+        if (flag == 1) {
+            return new ResponseEntity("success", HttpStatus.OK);
+        } else {
+            return new ResponseEntity("ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Transactional
     @RequestMapping(value = "/coindesk", method = RequestMethod.PUT, produces = "application/json")
     public ResponseEntity updateCoindesk(@RequestBody Coin coin) {
-        int flag = coinRepository.update(coin.getChartName(), coin.getDisclaimer(), coin.getId());
+        int flag = coindeskService.updateCoin(coin);
         if (flag == 1) {
             return new ResponseEntity(coinRepository.findById(coin.getId()), HttpStatus.OK);
         } else if (flag == 0) {
@@ -90,6 +96,6 @@ public class CoinDeskController {
     @Transactional
     @RequestMapping(value = "/coindesk/{id}", method = RequestMethod.DELETE)
     public String deleteCoindesk(@PathVariable String id) {
-        return coinRepository.deleteById(id) == 1 ? "success" : "failed";
+        return coindeskService.deleteCoin(id) == 1 ? "success" : "failed";
     }
 }

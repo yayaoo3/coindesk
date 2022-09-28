@@ -1,18 +1,23 @@
 package com.oswin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@IdClass(ForeignCurrencyPK.class)
 @Table(name ="ExchangeRates")
+@JsonInclude(JsonInclude.Include.NON_NULL) //null的值則不回傳
 public class ForeignCurrency implements Serializable {
 
+    @JsonIgnore
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private String id;
+
     @Id
     @Column(name = "code")
     private String code;

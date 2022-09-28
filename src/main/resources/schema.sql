@@ -8,7 +8,6 @@ create table if not exists Demo (
 create table if not exists Cryptocurrency (
     id varchar(50) not null,
     chartName varchar(25) not null,
-    disclaimer varchar(100) not null,
     updatedTime date not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );

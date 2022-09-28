@@ -28,36 +28,7 @@ public class ExchangeRatesService {
     private Gson gson;
 
 
-    public Coin getCoin(String result) {
-        Coin coin = new Coin();
-        JsonObject data = gson.fromJson(result, JsonObject.class);
-        LOGGER.info(result);
 
-        coin.setChartName(data.getAsJsonPrimitive("chartName").getAsString());
-        coin.setDisclaimer(data.getAsJsonPrimitive("disclaimer").getAsString());
-
-        JsonObject time = data.getAsJsonObject("time");
-        String date = time.getAsJsonPrimitive("updatedISO").getAsString();
-        coin.setUpdatedTime(convertStringToDate(date));
-        LOGGER.debug(covertDateFormat(date));
-
-        JsonObject bpi = data.getAsJsonObject("bpi");
-        LOGGER.info(bpi);
-        Iterator<String> keys = bpi.keySet().iterator();
-        LOGGER.info(keys);
-        while (keys.hasNext()) {
-            String key = keys.next();
-            if (bpi.getAsJsonObject(key) instanceof JsonObject) {
-                // do something with jsonObject here
-                LOGGER.info(key + ":" + bpi.getAsJsonObject(key));
-                LOGGER.info(bpi.getAsJsonObject(key).toString());
-                ForeignCurrency fc = gson.fromJson(bpi.getAsJsonObject(key).toString(),ForeignCurrency.class);
-                LOGGER.info(fc);
-                coin.getForeignCurrency().add(fc);
-            }
-        }
-        return coin;
-    }
 
 
     public String convertDateToString(Date dt) {
